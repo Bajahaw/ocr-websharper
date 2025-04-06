@@ -1,0 +1,49 @@
+{
+  "Files": [
+    {
+      "Id": "/home/radhi/RiderProjects/ocr-websharper/ocr-websharper/wwwroot/Scripts/WebSharper.Core.JavaScript/Runtime.js",
+      "PackagePath": "staticwebassets/Scripts/WebSharper.Core.JavaScript/Runtime.js"
+    },
+    {
+      "Id": "/home/radhi/RiderProjects/ocr-websharper/ocr-websharper/wwwroot/Scripts/ocr-websharper.css",
+      "PackagePath": "staticwebassets/Scripts/ocr-websharper.css"
+    },
+    {
+      "Id": "/home/radhi/RiderProjects/ocr-websharper/ocr-websharper/wwwroot/Scripts/ocr-websharper.head.html",
+      "PackagePath": "staticwebassets/Scripts/ocr-websharper.head.html"
+    },
+    {
+      "Id": "/home/radhi/RiderProjects/ocr-websharper/ocr-websharper/wwwroot/Scripts/ocr-websharper.head.js",
+      "PackagePath": "staticwebassets/Scripts/ocr-websharper.head.js"
+    },
+    {
+      "Id": "/home/radhi/RiderProjects/ocr-websharper/ocr-websharper/wwwroot/Scripts/ocr-websharper.js",
+      "PackagePath": "staticwebassets/Scripts/ocr-websharper.js"
+    },
+    {
+      "Id": "/home/radhi/RiderProjects/ocr-websharper/ocr-websharper/wwwroot/Scripts/ocr-websharper.min.js",
+      "PackagePath": "staticwebassets/Scripts/ocr-websharper.min.js"
+    },
+    {
+      "Id": "/home/radhi/RiderProjects/ocr-websharper/ocr-websharper/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.ocr-websharper.props",
+      "PackagePath": "build\\ocr-websharper.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.ocr-websharper.props",
+      "PackagePath": "buildMultiTargeting\\ocr-websharper.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.ocr-websharper.props",
+      "PackagePath": "buildTransitive\\ocr-websharper.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.ocr-websharper.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
