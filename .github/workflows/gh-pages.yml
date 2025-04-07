@@ -25,17 +25,17 @@ jobs:
             add source https://nuget.pkg.github.com/dotnet-websharper/index.json 
             --name github 
             --username ${{ secrets.USER }}
-            --password ${{ secrets.PASS }} 
+            --password ${{ secrets.GITHUB_TOKEN }} 
             --store-password-in-clear-text
 
       - run: npm install
-        working-directory: src/client
+        working-directory: ocr-websharper
       - run: dotnet build
-        working-directory: src/client
+        working-directory: ocr-websharper
       - run: npm run build:css
-        working-directory: src/client
+        working-directory: ocr-websharper
       - run: npm run release
-        working-directory: src/client
+        working-directory: ocr-websharper
       - run: cp -r src/client/examples dist/
       - run: echo "fsharp.radhi.tech" > CNAME
         working-directory: dist
