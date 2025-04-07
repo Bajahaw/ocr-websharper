@@ -3,7 +3,7 @@
   build: {
     rollupOptions: {
       input: [
-        "./Scripts/ocr_websharper.min.js"
+        "./Scripts/ocr-websharper.min.js"
       ]
     }
   }
