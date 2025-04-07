@@ -32,8 +32,6 @@ jobs:
         working-directory: ocr-websharper
       - run: dotnet build
         working-directory: ocr-websharper
-      - run: npm run build:css
-        working-directory: ocr-websharper
       - run: npm run release
         working-directory: ocr-websharper
       - run: cp -r src/client/examples dist/
