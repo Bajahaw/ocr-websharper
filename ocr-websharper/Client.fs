@@ -2,6 +2,9 @@ namespace ocr_websharper
 
 open System.Runtime.InteropServices.JavaScript
 open Microsoft.AspNetCore.Components.Web
+open System
+open System.IO
+open Microsoft.FSharp.Control
 open WebSharper
 open WebSharper.Core.AST
 open WebSharper.JavaScript
@@ -15,6 +18,7 @@ open WebSharper.UI.Html // Open Html module for easier access to Elt/Attr
 
 [<JavaScript>]
 module Client =
+    
     // Placeholder for the actual AI API call
     // Takes image data (e.g., base64 string) and returns the extracted text
     
@@ -46,17 +50,17 @@ module Client =
         }
 
     // Helper to read a File object as a Base64 Data URL
-    // let readFileAsDataURL (file: File) : Async<string> =
-    //     Async.FromContinuations(fun (cont, econt, _) ->
-    //         let reader: FileReader<_> = JS.Inline("new FileReader()")
-    //         reader.OnLoad <- fun (_: ProgressEvent) ->
-    //             match reader.Result with
-    //             | dataUrl -> cont dataUrl
-    //             | _ -> econt (System.Exception("Failed to read file as Data URL"))
-    //         reader.OnError <- fun (_: ProgressEvent) ->
-    //             econt (System.Exception("Error reading file"))
-    //         reader.ReadAsDataURL(file)
-    //     )
+    let readFileAsDataURL (file: File) : Async<string> =
+        Microsoft.FSharp.Control.Async.FromContinuations(fun (cont, econt, _) ->
+            let reader: FileReader<_> = JS.Inline("new FileReader()")
+            reader.OnLoad <- fun (_: ProgressEvent) ->
+                match reader.Result with
+                | dataUrl -> cont dataUrl
+                | _ -> econt (System.Exception("Failed to read file as Data URL"))
+            reader.OnError <- fun (_: ProgressEvent) ->
+                econt (System.Exception("Error reading file"))
+            reader.ReadAsDataURL(file)
+        )
         
     type State = {
             ImagePreviewUrl: Var<string option>
@@ -90,7 +94,7 @@ module Client =
                     state.ImagePreviewUrl.Value <- None // Clear previous preview immediately
 
                     // Read file for preview
-                    // let! dataUrl = readFileAsDataURL file
+                    let! dataUrl = readFileAsDataURL file
 
                     // Show preview
                     // state.ImagePreviewUrl.Value <- Some dataUrl
@@ -108,7 +112,7 @@ module Client =
                     //     state.OcrResult.Value <- None // Clear previous result on error
                     //
                     // state.IsLoading.Value <- false
-            } 
+            }
 
         // Hidden file input element reference
         
@@ -128,20 +132,20 @@ module Client =
                   // Dynamic class for drag-over effect
                   Attr.DynamicClassPred "drag-over" state.IsDragOver.View
                   // Click handler: triggers the hidden file input
-                  on.click (fun el _ -> JS.Document.GetElementById(fileInputId)?click())
+                  on.click (fun el _ -> JS.Document.GetElementById(fileInputId)?click());
                   // Drag and Drop handlers
                   on.dragOver (fun el ev ->
                       ev.PreventDefault() // Necessary to allow drop
-                      state.IsDragOver.Value <- true)
+                      state.IsDragOver.Value <- true);
                   on.dragLeave (fun el ev ->
                       ev.PreventDefault()
-                      state.IsDragOver.Value <- false)
-                  // on.drop (fun el ev ->
-                  //     ev.PreventDefault()
-                  //     state.IsDragOver.Value <- false
-                  //     match ev.DataTransfer.Files |> Array.tryHead with
-                  //     | Some file -> handleFile file
-                  //     | None -> state.ErrorMessage.Value <- Some "No file dropped.")
+                      state.IsDragOver.Value <- false);
+                  on.drop (fun el ev ->
+                    ev.PreventDefault()
+                    state.IsDragOver.Value <- false
+                    match ev.JS.Self?dataTransfer?files |> Array.tryHead with
+                    | Some file -> handleFile file |> Microsoft.FSharp.Control.Async.Start
+                    | None -> state.ErrorMessage.Value <- Some "No file dropped.");
                   // Paste handler
                   // on.paste (fun el ev ->
                   //     ev.PreventDefault()
