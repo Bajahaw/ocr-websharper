@@ -4,6 +4,7 @@ open System.Runtime.InteropServices.JavaScript
 open Microsoft.AspNetCore.Components.Web
 open System
 open System.IO
+open Microsoft.FSharp.Collections
 open Microsoft.FSharp.Control
 open WebSharper
 open WebSharper.Core.AST
@@ -97,27 +98,25 @@ module Client =
                     let! dataUrl = readFileAsDataURL file
 
                     // Show preview
-                    // state.ImagePreviewUrl.Value <- Some dataUrl
+                    state.ImagePreviewUrl.Value <- Some dataUrl
 
                     // Call the (placeholder) OCR function
-                    // let! result = performOcrAsync dataUrl
+                    let! result = performOcrAsync dataUrl
 
                     // Update UI based on result
-                    // match result with
-                    // | Ok ocrText ->
-                    //     state.OcrResult.Value <- Some ocrText
-                    //     state.ErrorMessage.Value <- None
-                    // | Error msg ->
-                    //     state.ErrorMessage.Value <- Some msg
-                    //     state.OcrResult.Value <- None // Clear previous result on error
-                    //
-                    // state.IsLoading.Value <- false
+                    match result with
+                    | Ok ocrText ->
+                        state.OcrResult.Value <- Some ocrText
+                        state.ErrorMessage.Value <- None
+                    | Error msg ->
+                        state.ErrorMessage.Value <- Some msg
+                        state.OcrResult.Value <- None // Clear previous result on error
+                        state.IsLoading.Value <- false
             }
 
         // Hidden file input element reference
         
         let fileInputId = "file-input"
-        let h = h1 [Attr.Class "mb-4 text-center"] [text "AI Image OCR"]
         let fileInput = input [attr.id fileInputId; attr.``type`` "file"; attr.accept "image/*"; attr.style "display: none;"] []
 
         // --- UI Structure using WebSharper.UI and Bootstrap ---
@@ -141,26 +140,18 @@ module Client =
                       ev.PreventDefault()
                       state.IsDragOver.Value <- false);
                   on.drop (fun el ev ->
-                    ev.PreventDefault()
-                    state.IsDragOver.Value <- false
-                    match ev.JS.Self?dataTransfer?files |> Array.tryHead with
-                    | Some file -> handleFile file |> Microsoft.FSharp.Control.Async.Start
-                    | None -> state.ErrorMessage.Value <- Some "No file dropped.");
-                  // Paste handler
-                  // on.paste (fun el ev ->
-                  //     ev.PreventDefault()
-                  //     let items = ev.ClipboardData.Items
-                  //     let imageItem =
-                  //         seq {0 .. items.Length - 1}
-                  //         |> Seq.map (fun i -> items.Item(i))
-                  //         |> Seq.tryFind (fun item -> item.Type.StartsWith("image/"))
-                  //
-                  //     match imageItem with
-                  //     | Some item ->
-                  //         match item.GetAsFile() with
-                  //         | null -> state.ErrorMessage.Value <- Some "Could not get pasted image as file."
-                  //         | file -> handleFile file
-                  //     | None -> state.ErrorMessage.Value <- Some "No image found in pasted content.")
+                      ev.PreventDefault()
+                      state.IsDragOver.Value <- false
+                      match ev.JS.Self?dataTransfer?files |> Array.tryHead with
+                      | Some file -> handleFile file |> Microsoft.FSharp.Control.Async.Start
+                      | None -> state.ErrorMessage.Value <- Some "No file dropped.");
+                  on.paste (fun el ev ->
+                      ev.PreventDefault()
+                      match ev?clipboardData?files |> Array.tryHead with
+                      | Some files -> handleFile files |> Microsoft.FSharp.Control.Async.Start
+                      | None -> state.ErrorMessage.Value <- Some "No file pasted."
+                  )
+
                 ]
                 [ p [Attr.Class "lead"] [text "Drop image here, paste, or click to upload"]
                   i [Attr.Class "fs-3 text-muted"] [text "(PNG, JPG, GIF, etc.)"]
