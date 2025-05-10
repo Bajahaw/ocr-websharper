@@ -100,7 +100,8 @@ module Client =
                     | Error msg ->
                         state.ErrorMessage.Value <- Some msg
                         state.OcrResult.Value <- None // Clear previous result on error
-                        state.IsLoading.Value <- false
+                        
+                    state.IsLoading.Value <- false
             }
 
         // Hidden file input element reference
