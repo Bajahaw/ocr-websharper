@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "hXyDgWUVI3A=",
+  "dgSpecHash": "UdVmg/0q/og=",
   "success": true,
   "projectFilePath": "/home/radhi/RiderProjects/ocr-websharper/ocr-websharper/ocr-websharper.fsproj",
   "expectedPackageFiles": [
@@ -93,7 +93,7 @@
     "/home/radhi/.nuget/packages/websharper.aspnetcore/8.0.0.540/websharper.aspnetcore.8.0.0.540.nupkg.sha512",
     "/home/radhi/.nuget/packages/websharper.fsharp/8.0.0.540/websharper.fsharp.8.0.0.540.nupkg.sha512",
     "/home/radhi/.nuget/packages/websharper.ui/8.0.0.540/websharper.ui.8.0.0.540.nupkg.sha512",
-    "/home/radhi/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.14/microsoft.aspnetcore.app.ref.8.0.14.nupkg.sha512"
+    "/home/radhi/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.15/microsoft.aspnetcore.app.ref.8.0.15.nupkg.sha512"
   ],
   "logs": []
 }

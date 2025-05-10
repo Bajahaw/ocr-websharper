@@ -28,17 +28,6 @@ module Client =
     
     let performOcrAsync (imageDataBase64: string) : Async<Result<string, string>> =
         async {
-            // Simulate network delay
-            // do! Async. 2000 // Simulate 2 seconds processing time
-
-            // **PLACEHOLDER LOGIC**
-            // In a real application, you would make an HTTP request here:
-            // - Use JS.Fetch or a WebSharper HTTP library.
-            // - Send `imageDataBase64` (potentially without the `data:image/...;base64,` prefix)
-            //   to your AI provider's API endpoint (Ollama, OpenAI, Groq, etc.).
-            // - Handle the API response (success or error).
-            // - Remember to handle CORS if calling directly from the browser.
-            //   Often, it's better to proxy the call through your own backend.
 
             printfn "Simulating OCR for image data starting with: %s..." (imageDataBase64.Substring(0, 50))
 
@@ -115,7 +104,6 @@ module Client =
             }
 
         // Hidden file input element reference
-        
         let fileInputId = "file-input"
         let fileInput = input [attr.id fileInputId; attr.``type`` "file"; attr.accept "image/*"; attr.style "display: none;"] []
 
@@ -180,7 +168,7 @@ module Client =
                 match previewUrl with
                 | Some url ->
                     div [Attr.Class "text-center mt-3"] [
-                        img [attr.id "hello"] []
+                         img [ attr.src url; Attr.Class "img-fluid"; attr.alt "Preview" ] []
                     ]
                 | None -> Doc.Empty)
                 state.ImagePreviewUrl.View

@@ -1,23 +1,24 @@
-2025-04-06 17:20:31.4683|DEBUG|Program|location of wsfscservice is: /home/radhi/.nuget/packages/websharper.fsharp/8.0.0.540/tools/net8.0/linux-x64 (server side)
-2025-04-06 17:20:31.4686|DEBUG|Program|pipename is: /tmp/fd9c2f835b697f64178ee27013227e97 (server side)
-2025-04-06 17:20:31.4686|DEBUG|Program|Compiling /home/radhi/RiderProjects/ocr-websharper/ocr-websharper/ocr-websharper.fsproj
-2025-04-06 17:20:31.8612|TRACE|Program|Server sends: n: F# compilation: 00:00:00.3938356
-2025-04-06 17:20:31.9617|TRACE|Program|Server sends: n: Checking project: 00:00:00.1004823
-2025-04-06 17:20:31.9617|TRACE|Program|Server sends: n: Waiting on merged metadata: 00:00:00.0001766
-2025-04-06 17:20:31.9744|TRACE|Program|Server sends: n: Parsing with FCS: 00:00:00.0125435
-2025-04-06 17:20:31.9745|TRACE|Program|Server sends: n: Analyzing function arguments: 00:00:00.0001483
-2025-04-06 17:20:31.9745|TRACE|Program|Server sends: n: Resolving names: 00:00:00.0001538
-2025-04-06 17:20:31.9768|TRACE|Program|Server sends: n: WebSharper translation: 00:00:00.0021613
-2025-04-06 17:20:31.9768|TRACE|Program|Server sends: n: Source position transformations: 00:00:00.0004100
-2025-04-06 17:20:31.9774|TRACE|Program|Server sends: n: Packaging assembly: 00:00:00.0001792
-2025-04-06 17:20:31.9957|TRACE|Program|Server sends: n: Computing metadata: 00:00:00.0182445
-2025-04-06 17:20:31.9957|TRACE|Program|Server sends: n: Writing reexports root.js: 00:00:00.0003041
-2025-04-06 17:20:31.9957|TRACE|Program|Server sends: n: Writing ocr_websharper.Client.State.js: 00:00:00.0003976
-2025-04-06 17:20:31.9964|TRACE|Program|Server sends: n: Writing ocr_websharper.Client.js: 00:00:00.0000401
-2025-04-06 17:20:31.9964|TRACE|Program|Server sends: n: Writing $EntryPoint.js: 00:00:00.0000236
-2025-04-06 17:20:31.9964|TRACE|Program|Server sends: n: Writing .d.ts files: 00:00:00.0002004
-2025-04-06 17:20:31.9964|TRACE|Program|Server sends: n: Hashing resources: 00:00:00.0000760
-2025-04-06 17:20:32.2056|TRACE|Program|Server sends: n: Serializing metadata: 00:00:00.2088862
-2025-04-06 17:20:32.2075|TRACE|Program|Server sends: n: Writing resources into assembly: 00:00:00.0018916
-2025-04-06 17:20:32.2684|TRACE|Program|Server sends: n: Bundling: 00:00:00.0608911
-2025-04-06 17:20:32.2684|TRACE|Program|Server sends: x: 0
+2025-05-11 01:22:08.7600|DEBUG|Program|location of wsfscservice is: /home/radhi/.nuget/packages/websharper.fsharp/8.0.0.540/tools/net8.0/linux-x64 (server side)
+2025-05-11 01:22:08.7600|DEBUG|Program|pipename is: /tmp/fd9c2f835b697f64178ee27013227e97 (server side)
+2025-05-11 01:22:08.7600|DEBUG|Program|Compiling /home/radhi/RiderProjects/ocr-websharper/ocr-websharper/ocr-websharper.fsproj
+2025-05-11 01:22:09.1817|TRACE|Program|Server sends: e: \home\radhi\RiderProjects\ocr-websharper\ocr-websharper\Client.fs(49,19,49,20): warning FS0026: This rule will never be matched
+2025-05-11 01:22:09.1817|TRACE|Program|Server sends: n: F# compilation: 00:00:00.4225084
+2025-05-11 01:22:09.2836|TRACE|Program|Server sends: n: Checking project: 00:00:00.1017183
+2025-05-11 01:22:09.2836|TRACE|Program|Server sends: n: Waiting on merged metadata: 00:00:00.0001689
+2025-05-11 01:22:09.2985|TRACE|Program|Server sends: n: Parsing with FCS: 00:00:00.0148404
+2025-05-11 01:22:09.2985|TRACE|Program|Server sends: n: Analyzing function arguments: 00:00:00.0001835
+2025-05-11 01:22:09.2990|TRACE|Program|Server sends: n: Resolving names: 00:00:00.0002309
+2025-05-11 01:22:09.3008|TRACE|Program|Server sends: n: WebSharper translation: 00:00:00.0018942
+2025-05-11 01:22:09.3013|TRACE|Program|Server sends: n: Source position transformations: 00:00:00.0004689
+2025-05-11 01:22:09.3013|TRACE|Program|Server sends: n: Packaging assembly: 00:00:00.0002410
+2025-05-11 01:22:09.3242|TRACE|Program|Server sends: n: Computing metadata: 00:00:00.0225868
+2025-05-11 01:22:09.3242|TRACE|Program|Server sends: n: Writing reexports root.js: 00:00:00.0003634
+2025-05-11 01:22:09.3253|TRACE|Program|Server sends: n: Writing ocr_websharper.Client.State.js: 00:00:00.0008394
+2025-05-11 01:22:09.3253|TRACE|Program|Server sends: n: Writing ocr_websharper.Client.js: 00:00:00.0000395
+2025-05-11 01:22:09.3253|TRACE|Program|Server sends: n: Writing $EntryPoint.js: 00:00:00.0000264
+2025-05-11 01:22:09.3253|TRACE|Program|Server sends: n: Writing .d.ts files: 00:00:00.0003293
+2025-05-11 01:22:09.3253|TRACE|Program|Server sends: n: Hashing resources: 00:00:00.0000904
+2025-05-11 01:22:09.3881|TRACE|Program|Server sends: n: Serializing metadata: 00:00:00.0623063
+2025-05-11 01:22:09.3904|TRACE|Program|Server sends: n: Writing resources into assembly: 00:00:00.0022455
+2025-05-11 01:22:09.6118|TRACE|Program|Server sends: n: Bundling: 00:00:00.2213895
+2025-05-11 01:22:09.6126|TRACE|Program|Server sends: x: 0

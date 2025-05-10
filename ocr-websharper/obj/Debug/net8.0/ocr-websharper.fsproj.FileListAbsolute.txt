@@ -64,3 +64,4 @@
 /home/radhi/RiderProjects/ocr-websharper/ocr-websharper/obj/Debug/net8.0/ocr-websharper.pdb
 /home/radhi/RiderProjects/ocr-websharper/ocr-websharper/obj/Debug/net8.0/ocr-websharper.genruntimeconfig.cache
 /home/radhi/RiderProjects/ocr-websharper/ocr-websharper/obj/Debug/net8.0/ocr-websharper.fsproj.CopyComplete
+/home/radhi/RiderProjects/ocr-websharper/ocr-websharper/obj/Debug/net8.0/ocr-websharper.sourcelink.json

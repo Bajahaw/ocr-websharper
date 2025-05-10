@@ -1,7 +1,13 @@
 {
-  "name": "ocr_websharper",
+  "name": "ocr-websharper",
   "version": "1.0.0",
   "devDependencies": {
     "esbuild": "^0.19.9"
+  },
+  "scripts": {
+    "release": "vite build"
+  },
+  "dependencies": {
+    "vite": "^4.4.11"
   }
 }

@@ -10,7 +10,7 @@ open System.Reflection
 [<assembly: System.Reflection.AssemblyCompanyAttribute("ocr-websharper")>]
 [<assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")>]
 [<assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")>]
-[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")>]
+[<assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1ffec2b13cc635586f905a2502d9fe51b61a12a")>]
 [<assembly: System.Reflection.AssemblyProductAttribute("ocr-websharper")>]
 [<assembly: System.Reflection.AssemblyTitleAttribute("ocr-websharper")>]
 [<assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")>]
