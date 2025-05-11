@@ -1,5 +1,9 @@
 namespace ocr_websharper
 
+open System.Net.Http
+open System.Text
+open System.Net.Http.Headers
+open System.Text.Json
 open System.Runtime.InteropServices.JavaScript
 open Microsoft.AspNetCore.Components.Web
 open System
@@ -20,11 +24,51 @@ open WebSharper.UI.Html // Open Html module for easier access to Elt/Attr
 [<JavaScript>]
 module Client =
     
-    // Placeholder for the actual AI API call
-    // Takes image data (e.g., base64 string) and returns the extracted text
-    
     type IndexTemplate = Template<"wwwroot/index.html", ClientLoad.FromDocument>
 
+    let callAiApi=
+
+        use client = new HttpClient()
+        let envKey = Environment.GetEnvironmentVariable("AI_API_KEY")
+        let apiKey =
+            match String.IsNullOrEmpty(envKey) with
+            | true -> "gsk_123"
+            | _ -> envKey
+        
+        client.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue("application/json"))
+        client.DefaultRequestHeaders.Authorization <- AuthenticationHeaderValue("Bearer", apiKey)
+        
+        let requestContent = 
+            JsonSerializer.Serialize(
+                {|
+                    model = "llama-3.2-11b-vision"
+                    messages = 
+                        [|
+                            {| role = "system"; content = "You are an professional OCR expert AI." |}
+                            {| role = "user"; content = "Extract the text from the image, exactly as you see it. use markdown styling if needed" |}
+                        |]
+                    max_tokens = 300
+                    temperature = 0.7
+                |})
+        let content = new StringContent(requestContent, Encoding.UTF8, "application/json")
+        
+        try
+            let response = client.PostAsync("https://api.groq.com/openai/v1/chat/completions", content).Result
+            response.EnsureSuccessStatusCode() |> ignore
+            
+            let responseBody = response.Content.ReadAsStringAsync().Result
+            let jsonResponse = JsonDocument.Parse(responseBody)
+            jsonResponse.RootElement
+                    .GetProperty("choices").[0]
+                    .GetProperty("message")
+                    .GetProperty("content")
+                    .GetString()
+            
+        with
+        | ex -> 
+            printfn $"API Error: %s{ex.Message}"
+            // Fallback content in case of API failure
+            "Error happened with Api."
     
     let performOcrAsync (imageDataBase64: string) : Async<Result<string, string>> =
         async {
