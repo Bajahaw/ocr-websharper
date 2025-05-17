@@ -125,7 +125,19 @@ module Client =
 
         // Hidden file input element reference
         let fileInputId = "file-input"
-        let fileInput = input [attr.id fileInputId; attr.``type`` "file"; attr.accept "image/*"; attr.style "display: none;"] []
+        let fileInput =
+            input [
+                attr.id fileInputId
+                attr.``type`` "file"
+                attr.accept "image/*"
+                attr.style "display: none"
+                on.change (fun el _ ->
+                  match el?files |> Array.tryHead with
+                  | Some file -> handleFile file |> Microsoft.FSharp.Control.Async.Start
+                  | None      -> state.ErrorMessage.Value <- Some "No file selected."
+                )
+            ] []
+            
         let bgImageStyle =
             state.ImagePreviewUrl.View
             |> View.Map (function
