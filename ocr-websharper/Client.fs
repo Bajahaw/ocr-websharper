@@ -1,86 +1,61 @@
 namespace ocr_websharper
 
-open System.Net.Http
-open System.Text
-open System.Net.Http.Headers
-open System.Text.Json
-open System.Runtime.InteropServices.JavaScript
-open Microsoft.AspNetCore.Components.Web
-open System
-open System.IO
-open Microsoft.FSharp.Collections
+open WebSharper.JavaScript
 open Microsoft.FSharp.Control
 open WebSharper
-open WebSharper.Core.AST
-open WebSharper.JavaScript
-open WebSharper.JavaScript.Dom
 open WebSharper.JavaScript.Promise
 open WebSharper.UI.Templating
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Client.Doc
-open WebSharper.UI.Html // Open Html module for easier access to Elt/Attr
+open WebSharper.UI.Html 
 
 [<JavaScript>]
 module Client =
     
     type IndexTemplate = Template<"wwwroot/index.html", ClientLoad.FromDocument>
-
-    let callAiApi=
-
-        use client = new HttpClient()
-        let envKey = Environment.GetEnvironmentVariable("AI_API_KEY")
-        let apiKey =
-            match String.IsNullOrEmpty(envKey) with
-            | true -> "gsk_123"
-            | _ -> envKey
-        
-        client.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue("application/json"))
-        client.DefaultRequestHeaders.Authorization <- AuthenticationHeaderValue("Bearer", apiKey)
-        
-        let requestContent = 
-            JsonSerializer.Serialize(
-                {|
-                    model = "llama-3.2-11b-vision"
-                    messages = 
-                        [|
-                            {| role = "system"; content = "You are an professional OCR expert AI." |}
-                            {| role = "user"; content = "Extract the text from the image, exactly as you see it. use markdown styling if needed" |}
-                        |]
-                    max_tokens = 300
-                    temperature = 0.7
-                |})
-        let content = new StringContent(requestContent, Encoding.UTF8, "application/json")
-        
-        try
-            let response = client.PostAsync("https://api.groq.com/openai/v1/chat/completions", content).Result
-            response.EnsureSuccessStatusCode() |> ignore
-            
-            let responseBody = response.Content.ReadAsStringAsync().Result
-            let jsonResponse = JsonDocument.Parse(responseBody)
-            jsonResponse.RootElement
-                    .GetProperty("choices").[0]
-                    .GetProperty("message")
-                    .GetProperty("content")
-                    .GetString()
-            
-        with
-        | ex -> 
-            printfn $"API Error: %s{ex.Message}"
-            // Fallback content in case of API failure
-            "Error happened with Api."
-    
+             
     let performOcrAsync (imageDataBase64: string) : Async<Result<string, string>> =
         async {
 
-            printfn "Simulating OCR for image data starting with: %s..." (imageDataBase64.Substring(0, 50))
-
-            // Simulate a successful response
-            let dummyResult = "This is the simulated OCR text extracted from the image.\nIt might contain multiple lines."
-            return Ok dummyResult
-
-            // Example of simulating an error:
-            // return Error "Simulated AI API error: Could not process image."
+            let apiKey = "gsk_123"
+            // Prepare payload
+            let prompt = "Extract ALL text from this image exactly as it appears. Preserve original formatting, line breaks, punctuation and special characters. Return ONLY the extracted text with NO additional commentary."
+            let payload =
+                $"""
+                {{
+                  "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+                  "messages": [
+                    {{
+                      "role": "system",
+                      "content": "You are an OCR Expert, return only text with markdown format if needed"
+                    }},
+                    {{
+                      "role": "user",
+                      "content": [
+                        {{ "type": "text", "text": "{prompt}" }},
+                        {{ "type": "image_url",  "image_url": {{ "url": "{imageDataBase64}" }} }}
+                      ]
+                    }}
+                  ]
+                }}  
+            """
+            
+            let url = "https://api.groq.com/openai/v1/chat/completions"
+            let headers = Headers() // JS Headers instance
+            headers.Append("Content-Type", "application/json")
+            headers.Append("Authorization", "Bearer " + apiKey)
+            let props = RequestOptions (
+                  Method = "POST",
+                  Headers = headers,
+                  Body = payload
+                )
+            let! resp = JS.Fetch(url, props) |> AsAsync
+            let! raw = resp.Text() |> AsAsync
+            let parsed = JSON.Parse raw
+            let result = parsed?choices?at(0)?message?content
+            
+            return Ok result
         }
 
     // Helper to read a File object as a Base64 Data URL
@@ -120,12 +95,12 @@ module Client =
                 // Basic validation (check if it's an image)
                 if not (file.Type.StartsWith("image/")) then
                     state.ErrorMessage.Value <- Some $"Invalid file type: {file.Type}. Please upload an image."
-                    state.ImagePreviewUrl.Value <- None // Clear preview if invalid
+                    state.ImagePreviewUrl.Value <- None
                 else
                     state.IsLoading.Value <- true
                     state.OcrResult.Value <- None
                     state.ErrorMessage.Value <- None
-                    state.ImagePreviewUrl.Value <- None // Clear previous preview immediately
+                    state.ImagePreviewUrl.Value <- None 
 
                     // Read file for preview
                     let! dataUrl = readFileAsDataURL file
@@ -133,7 +108,7 @@ module Client =
                     // Show preview
                     state.ImagePreviewUrl.Value <- Some dataUrl
 
-                    // Call the (placeholder) OCR function
+                    // performing the OCR function
                     let! result = performOcrAsync dataUrl
 
                     // Update UI based on result
@@ -156,7 +131,7 @@ module Client =
         div [Attr.Class "container mt-4"] [
             h1 [Attr.Class "mb-4 text-center"] [text "AI Image OCR"]
             
-            // Hidden File Input (needed for click-to-upload)
+            // needed for click-to-upload
             fileInput
 
             // Drop Zone Area
@@ -175,12 +150,12 @@ module Client =
                   on.drop (fun el ev ->
                       ev.PreventDefault()
                       state.IsDragOver.Value <- false
-                      match ev.JS.Self?dataTransfer?files |> Array.tryHead with
+                      match ev.JS.Self?dataTransfer?files |> Microsoft.FSharp.Collections.Array.tryHead with
                       | Some file -> handleFile file |> Microsoft.FSharp.Control.Async.Start
                       | None -> state.ErrorMessage.Value <- Some "No file dropped.");
                   on.paste (fun el ev ->
                       ev.PreventDefault()
-                      match ev?clipboardData?files |> Array.tryHead with
+                      match ev?clipboardData?files |> Microsoft.FSharp.Collections.Array.tryHead with
                       | Some files -> handleFile files |> Microsoft.FSharp.Control.Async.Start
                       | None -> state.ErrorMessage.Value <- Some "No file pasted."
                   )
@@ -195,7 +170,7 @@ module Client =
             div [ Attr.Class "text-center mt-3"
                   Attr.DynamicStyle "display" (state.IsLoading.View |> View.Map (function true -> "block" | false -> "none"))
                 ]
-                [ div [Attr.Class "spinner-border text-primary"; ] //attr.role "status"
+                [ div [Attr.Class "spinner-border text-primary"; ] 
                       [ span [Attr.Class "visually-hidden"] [text "Loading..."] ]
                 ]
 
@@ -203,7 +178,7 @@ module Client =
             Doc.BindView (fun errorMsg ->
                 match errorMsg with
                 | Some msg ->
-                    div [Attr.Class "alert alert-danger mt-3";] //Attr.Role "alert"
+                    div [Attr.Class "alert alert-danger mt-3";] 
                         [text msg]
                 | None -> Doc.Empty)
                 state.ErrorMessage.View
@@ -224,14 +199,13 @@ module Client =
                 | Some txt ->
                     div [Attr.Class "mt-4"] [
                         h4 [] [text "OCR Result:"]
-                        pre [attr.id "ocr-result-text"] [text txt] // Use <pre> for formatting
+                        pre [attr.id "ocr-result-text"] [text txt] 
                     ]
                 | None -> Doc.Empty)
                 state.OcrResult.View
         ]
         |> RunById "main"        
 
-    // Entry point for the client-side application
     [<SPAEntryPoint>]
     let EntryPoint() =
        Main()
