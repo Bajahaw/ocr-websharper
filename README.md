@@ -1,11 +1,13 @@
 <div align="center"> 
-   # AI Image OCR with WebSharper
+   
+# AI Image OCR with WebSharper
 
 ## Live Demo
 
 🚀 Try it now: https://fsharp.radhi.tech/
 
-![Screenshot Placeholder](docs/screenshot.png)
+![Screenshot From 2025-05-18 00-07-21](https://github.com/user-attachments/assets/d89b6e46-67e8-41dc-b641-20b96ae1d77f)
+
 
 </div>
 
@@ -48,6 +50,9 @@ to send back any kind of data (Json, markdown, etc.)(Not yet implemented in this
    dotnet run
    ```
 ## Certifications
+
+![424776638-0f02337c-f449-4b58-9f76-b289716b9b4c](https://github.com/user-attachments/assets/00853fd9-1689-482a-ad1f-37f3e5743807)
+
 
 ## License
 This project is licensed under the MIT License
