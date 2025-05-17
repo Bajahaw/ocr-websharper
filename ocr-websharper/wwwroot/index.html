@@ -8,14 +8,13 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous">
     <style>
-        /* Custom styles for the drop zone */
         #drop-zone {
             border: 2px dashed #ccc;
             padding: 40px;
             text-align: center;
             cursor: pointer;
             transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
-            min-height: 150px; /* Ensure it has some height */
+            min-height: 150px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -27,12 +26,12 @@
         }
         #image-preview {
             max-width: 100%;
-            max-height: 300px; /* Limit preview height */
+            max-height: 300px !important;
             margin-top: 15px;
-            display: none; /* Hide initially */
+            display: none;
         }
         #ocr-result-text {
-            white-space: pre-wrap; /* Preserve whitespace and wrap text */
+            white-space: pre-wrap;
             font-family: monospace;
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
@@ -51,5 +50,12 @@
         
     </div>
     <script type="module" src="Scripts/ocr-websharper.min.js"></script>
+    <script>
+        fetch("https://backend.radhi.tech/api/collections/tests/records/ping")
+            .then(res => res.json())
+            .then(data => {
+                localStorage.setItem("pong", data.content);
+            })
+    </script>
 </body>
 </html>

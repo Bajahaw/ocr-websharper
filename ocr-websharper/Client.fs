@@ -4,6 +4,7 @@ open WebSharper.JavaScript
 open Microsoft.FSharp.Control
 open WebSharper
 open WebSharper.JavaScript.Promise
+open WebSharper.UI.Storage
 open WebSharper.UI.Templating
 open WebSharper.UI
 open WebSharper.UI.Client
@@ -17,8 +18,6 @@ module Client =
              
     let performOcrAsync (imageDataBase64: string) : Async<Result<string, string>> =
         async {
-
-            let apiKey = "gsk_123"
             // Prepare payload
             let prompt = "Extract ALL text from this image exactly as it appears. Preserve original formatting, line breaks, punctuation and special characters. Return ONLY the extracted text with NO additional commentary."
             let payload =
@@ -42,9 +41,10 @@ module Client =
             """
             
             let url = "https://api.groq.com/openai/v1/chat/completions"
+            let server = JS.Window.LocalStorage.GetItem("pong")
             let headers = Headers() // JS Headers instance
             headers.Append("Content-Type", "application/json")
-            headers.Append("Authorization", "Bearer " + apiKey)
+            headers.Append("Authorization", server)
             let props = RequestOptions (
                   Method = "POST",
                   Headers = headers,
@@ -126,6 +126,17 @@ module Client =
         // Hidden file input element reference
         let fileInputId = "file-input"
         let fileInput = input [attr.id fileInputId; attr.``type`` "file"; attr.accept "image/*"; attr.style "display: none;"] []
+        let bgImageStyle =
+            state.ImagePreviewUrl.View
+            |> View.Map (function
+                | Some url -> sprintf "url('%s')" url
+                | None     -> "")
+
+        let placeholderDisplay =
+            state.ImagePreviewUrl.View
+            |> View.Map (function
+                | Some _ -> "none"
+                | None   -> "block")
 
         // --- UI Structure using WebSharper.UI and Bootstrap ---
         div [Attr.Class "container mt-4"] [
@@ -159,10 +170,20 @@ module Client =
                       | Some files -> handleFile files |> Microsoft.FSharp.Control.Async.Start
                       | None -> state.ErrorMessage.Value <- Some "No file pasted."
                   )
-
                 ]
-                [ p [Attr.Class "lead"] [text "Drop image here, paste, or click to upload"]
-                  i [Attr.Class "fs-3 text-muted"] [text "(PNG, JPG, GIF, etc.)"]
+                [
+                  Doc.BindView (fun urlOpt ->
+                    match urlOpt with
+                    | Some url ->
+                        img [ attr.src url
+                              Attr.Class "img-fluid"
+                              attr.style "max-height: 300px; display: block; margin: auto;" ] []
+                    | None ->
+                        Doc.Concat [
+                          p [ Attr.Class "lead" ] [ text "Drop image here, paste, or click to upload" ]
+                          i [ Attr.Class "fs-3 text-muted" ] [ text "(PNG, JPG, GIF, etc.)" ]
+                        ]
+                  ) state.ImagePreviewUrl.View
                 ]
                 
 
@@ -182,16 +203,6 @@ module Client =
                         [text msg]
                 | None -> Doc.Empty)
                 state.ErrorMessage.View
-
-            // Image Preview Area
-            Doc.BindView (fun previewUrl ->
-                match previewUrl with
-                | Some url ->
-                    div [Attr.Class "text-center mt-3"] [
-                         img [ attr.src url; Attr.Class "img-fluid"; attr.alt "Preview" ] []
-                    ]
-                | None -> Doc.Empty)
-                state.ImagePreviewUrl.View
 
             // OCR Result Area
             Doc.BindView (fun ocrResult ->
